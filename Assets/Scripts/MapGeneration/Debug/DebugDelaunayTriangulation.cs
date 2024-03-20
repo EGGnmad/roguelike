@@ -9,6 +9,8 @@ namespace MapGeneration.Debug
         [SerializeField] private float _vertexRadius;
         [SerializeField] private Color _vertexColor;
         [SerializeField] private Color _edgeColor;
+
+#if UNITY_EDITOR
         
         private void Start()
         {
@@ -33,5 +35,7 @@ namespace MapGeneration.Debug
                 Gizmos.DrawLine(triangle.edge2.point0.position, triangle.edge2.point1.position);
             }
         }
+        
+#endif
     }
 }

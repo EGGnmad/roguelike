@@ -10,6 +10,8 @@ namespace MapGeneration.Debug
         [SerializeField] private Color _vertexColor;
         [SerializeField] private Color _edgeColor;
 
+#if UNITY_EDITOR
+        
         private void Start()
         {
             _spanningTree = GetComponent<ISpanningTree>();
@@ -29,5 +31,7 @@ namespace MapGeneration.Debug
                 Gizmos.DrawSphere(edge.point1.position, _vertexRadius);
             }
         }
+        
+#endif
     }
 }

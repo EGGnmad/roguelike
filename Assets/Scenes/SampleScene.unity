@@ -675,11 +675,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f476ae87c294a4bff94b5ac277505917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boostTimeScale: 50
+  roomPrefab: {fileID: -2415354391496873410, guid: 4e3bd28975af74885b3f2d49b1586295, type: 3}
   radius: 32
   minRoomSize: 5
   maxRoomSize: 30
   maxRoomCount: 80
-  roomPrefab: {fileID: -2415354391496873410, guid: 4e3bd28975af74885b3f2d49b1586295, type: 3}
+  randomPathValue: 0.1
 --- !u!156049354 &1957261172
 Grid:
   m_ObjectHideFlags: 0
@@ -699,13 +701,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957261169}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38f7572747344118b4109a6be45b3ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _vertexRadius: 2
-  _vertexColor: {r: 0, g: 1, b: 0, a: 1}
+  _vertexColor: {r: 0, g: 1, b: 0, a: 0}
   _edgeColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &1957261174
 MonoBehaviour:

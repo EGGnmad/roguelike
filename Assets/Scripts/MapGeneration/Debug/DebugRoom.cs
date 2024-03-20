@@ -11,6 +11,8 @@ namespace MapGeneration.Debug
         [SerializeField] Color roomColor = Color.blue;
         [SerializeField] Color textColor = Color.blue;
 
+#if UNITY_EDITOR
+        
         private void Start()
         {
             _room = GetComponent<IRoom>();
@@ -34,5 +36,7 @@ namespace MapGeneration.Debug
             Vector2 pos = (Vector2)position + offset;
             Handles.Label(pos, _room.Index.ToString(), style);
         }
+        
+#endif
     }
 }

@@ -4,13 +4,16 @@ using DelaunayTriangulation;
 
 public class MinimumSpanningTree : ISpanningTree
 {
+    public float randomPathValue;
     private Triangulation _triangulation;
     private Dictionary<int, int> _parent;
     
-    public MinimumSpanningTree(Triangulation triangulation)
+    public MinimumSpanningTree(Triangulation triangulation, float pathValue = 0f)
     {
         _triangulation = triangulation;
         _parent = new Dictionary<int, int>();
+
+        randomPathValue = pathValue;
     }
 
     private Edge[] GetAllEdges()
@@ -38,7 +41,14 @@ public class MinimumSpanningTree : ISpanningTree
             int a = edges[i].point0.index;
             int b = edges[i].point1.index;
 
-            if (Find(a) == Find(b)) continue;
+            if (Find(a) == Find(b))
+            {
+                if (UnityEngine.Random.value < randomPathValue)
+                {
+                    results.Add(edges[i]);
+                }
+                continue;
+            }
             
             Union(a, b);
             results.Add(edges[i]);
