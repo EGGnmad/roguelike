@@ -103,5 +103,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7ab6c5d72948e0a8fb5509921ab94e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomColor: {r: 0, g: 0, b: 1, a: 1}
-  textColor: {r: 0, g: 0, b: 1, a: 1}
+  roomColor: {r: 0, g: 0.5764706, b: 1, a: 1}
+  textColor: {r: 0, g: 0.5803922, b: 1, a: 1}

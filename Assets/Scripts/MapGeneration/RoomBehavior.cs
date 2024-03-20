@@ -11,11 +11,12 @@ namespace MapGeneration
         public Vector2 GetSize() => transform.localScale;
 
         #region Fields:SteeringBehavior
-
+        
         private Vector3 _velocity;
         private Vector3 _position;
 
         public Vector3 Velocity => _velocity;
+        public bool isSeperationStart = false;
         
         #endregion
         
@@ -63,6 +64,8 @@ namespace MapGeneration
             _velocity /= agents.Length - 1;
             _velocity = _velocity.normalized;
             _velocity *= -1f;
+            
+            isSeperationStart = true;
         }
 
         #endregion

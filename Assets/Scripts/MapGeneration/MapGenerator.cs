@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DelaunayTriangulation;
 using MapGeneration;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
+public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation, ISpanningTree
 {
     #region Fields:Serialized
 
@@ -18,12 +21,12 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
     
     #endregion
 
-    #region Fields:Delaunay
+    #region Fields:private
 
     private RoomBehavior[] _rooms;
     private RoomBehavior[] _mainRooms;
     private Triangulation _triangulation;
-    private bool _isSeperationEnd;
+    private Edge[] _minimumEdges;
 
     #endregion
     
@@ -33,25 +36,9 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
     {
         Time.timeScale = 30;
         
-        _rooms = GenerateRooms(maxRoomCount);
-        _mainRooms = GetMainRooms(_rooms);
+        Generate();
     }
-
-    private void Update()
-    {
-        if (_isSeperationEnd) return;
-        
-        foreach (var room in _rooms)
-        {
-            _isSeperationEnd = _isSeperationEnd || room.Velocity != Vector3.zero;
-        }
-        _isSeperationEnd = !_isSeperationEnd;
-
-        if (!_isSeperationEnd) return;
-        List<Vertex> vertices = _mainRooms.Select(x => (Vertex)x).ToList();
-        _triangulation = new Triangulation(vertices);
-    }
-
+    
     #endregion
 
     #region Generation
@@ -119,6 +106,46 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         Triangulation triangulation = new Triangulation(vertices);
         return triangulation;
     }
+    
+    public async UniTask Generate()
+    {
+        // generate rooms
+        _rooms = GenerateRooms(maxRoomCount);
+        _mainRooms = GetMainRooms(_rooms);
+        
+        // wait until SeperationTask end
+        await SeperationTask(_rooms);
+        
+        // get delaunay triangles
+        _triangulation = GetDelaunayTriangle(_mainRooms);
+        
+        // get MST
+        _minimumEdges = new MinimumSpanningTree(_triangulation).GetSpanningTree();
+    }
+
+    #endregion
+
+    #region Task
+
+    private async UniTask SeperationTask(RoomBehavior[] rooms)
+    {
+        await Task.Run(async () =>
+        {
+            bool isRoomsStop = false;
+
+            while (!isRoomsStop)
+            {
+                
+                isRoomsStop = true;
+                foreach (var room in rooms)
+                {
+                    isRoomsStop = isRoomsStop && room.Velocity == Vector3.zero && room.isSeperationStart;
+                }
+                
+                await Task.Delay(TimeSpan.FromSeconds(0.5f));
+            }
+        });
+    }
 
     #endregion
     
@@ -130,5 +157,10 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
     public Triangulation GetTriangulation()
     {
         return _triangulation;
+    }
+
+    public Edge[] GetSpanningTree()
+    {
+        return _minimumEdges;
     }
 }

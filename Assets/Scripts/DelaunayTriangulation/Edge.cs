@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DelaunayTriangulation
 {
-    public class Edge
+    public class Edge : IComparable<Edge>
     {
         private float m_Length;
         public float length
@@ -68,6 +69,13 @@ namespace DelaunayTriangulation
         public override int GetHashCode()
         {
             return m_Point0.GetHashCode() + 31 * m_Point1.GetHashCode();
+        }
+
+        public int CompareTo(Edge other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return m_Length.CompareTo(other.m_Length);
         }
     }
 }
