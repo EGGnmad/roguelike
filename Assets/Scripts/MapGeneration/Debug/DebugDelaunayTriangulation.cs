@@ -20,19 +20,16 @@ namespace MapGeneration.Debug
         private void OnDrawGizmos()
         {
             //Draw Delaunay triangle
-            if (_triangulation == null || _triangulation.GetTriangulation() == null) return;
+            if (_triangulation == null || _triangulation.GetEdges() == null) return;
         
-            foreach (var triangle in _triangulation.GetTriangulation().triangles)
+            foreach (var edge in _triangulation.GetEdges())
             {
                 Gizmos.color = _vertexColor;
-                Gizmos.DrawSphere(triangle.vertex0.position, _vertexRadius);
-                Gizmos.DrawSphere(triangle.vertex1.position, _vertexRadius);
-                Gizmos.DrawSphere(triangle.vertex2.position, _vertexRadius);
+                Gizmos.DrawSphere(edge.point0.position, _vertexRadius);
+                Gizmos.DrawSphere(edge.point1.position, _vertexRadius);
                 
                 Gizmos.color = _edgeColor;
-                Gizmos.DrawLine(triangle.edge0.point0.position, triangle.edge0.point1.position);
-                Gizmos.DrawLine(triangle.edge1.point0.position, triangle.edge1.point1.position);
-                Gizmos.DrawLine(triangle.edge2.point0.position, triangle.edge2.point1.position);
+                Gizmos.DrawLine(edge.point0.position, edge.point1.position);
             }
         }
         

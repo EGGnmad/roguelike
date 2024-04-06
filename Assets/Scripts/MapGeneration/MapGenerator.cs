@@ -29,7 +29,7 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
 
     private RoomBehavior[] _rooms;
     private RoomBehavior[] _mainRooms;
-    private Triangulation _triangulation;
+    private Edge[] _edges;
     private Edge[] _minimumEdges;
 
     #endregion
@@ -41,9 +41,9 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         return _rooms;
     }
 
-    public Triangulation GetTriangulation()
+    public Edge[] GetEdges()
     {
-        return _triangulation;
+        return _edges;
     }
 
     public Edge[] GetSpanningTree()
@@ -142,11 +142,20 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         await UniTask.SwitchToMainThread();
     }
 
-    private Triangulation GetDelaunayTriangle(RoomBehavior[] mainRooms)
+    private Edge[] GetEdges(RoomBehavior[] mainRooms)
     {
         List<Vertex> vertices = mainRooms.Select(x => (Vertex)x).ToList();
         Triangulation triangulation = new Triangulation(vertices);
-        return triangulation;
+        
+        Edge[] edges = new Edge[triangulation.triangles.Count * 3];
+        for (int i = 0; i < triangulation.triangles.Count; i++)
+        {
+            edges[i * 3] = triangulation.triangles[i].edge0;
+            edges[i * 3 + 1] = triangulation.triangles[i].edge1;
+            edges[i * 3 + 2] = triangulation.triangles[i].edge2;
+        }
+
+        return edges;
     }
     
     public async UniTask Generate()
@@ -161,11 +170,11 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         // wait until SeperationTask end
         await SeperationTask(_rooms);
 
-        // get delaunay triangles
-        _triangulation = GetDelaunayTriangle(_mainRooms);
+        // get delaunay triangles(mesh)
+        _edges = GetEdges(_mainRooms);
 
         // get MST
-        _minimumEdges = new MinimumSpanningTree(_triangulation, randomPathValue).GetSpanningTree();
+        _minimumEdges = new MinimumSpanningTree(_edges, randomPathValue).GetSpanningTree();
 
         // back to normal time scale
         Time.timeScale = 1f;

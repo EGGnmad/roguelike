@@ -1223,7 +1223,7 @@ MonoBehaviour:
   minRoomSize: 5
   maxRoomSize: 30
   maxRoomCount: 80
-  randomPathValue: 0.1
+  randomPathValue: 0.09
 --- !u!156049354 &1957261172
 Grid:
   m_ObjectHideFlags: 0
