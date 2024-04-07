@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace MapGeneration.Debug
 {
+    [RequireComponent(typeof(IDelaunayTriangulation))]
     public class DebugDelaunayTriangulation : MonoBehaviour
     {
         private IDelaunayTriangulation _triangulation;

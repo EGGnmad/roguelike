@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace MapGeneration.Debug
 {
+    [RequireComponent(typeof(ISpanningTree))]
     public class DebugSpanningTree : MonoBehaviour
     {
         private ISpanningTree _spanningTree;

@@ -4,7 +4,7 @@ namespace MapGeneration
 {
     public interface IRoom
     {
-        public int Index { get; set; }
+        public int Index { get; }
         public Vector2 GetSize();
     }
 }
