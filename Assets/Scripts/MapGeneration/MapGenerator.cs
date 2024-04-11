@@ -7,7 +7,7 @@ using MapGeneration;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation, ISpanningTree, IHallway
+public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation, ISpanningTree
 {
     #region Fields:Serialized
 
@@ -32,7 +32,6 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
     private RoomBehavior[] _resultRooms;
     private Edge[] _edges;
     private Edge[] _minimumEdges;
-    private Edge[] _hallwayEdges;
     private HallwayBehavior[] _hallways;
 
     #endregion
@@ -52,11 +51,6 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
     public Edge[] GetSpanningTree()
     {
         return _minimumEdges;
-    }
-    
-    public Edge[] GetHallwayEdges()
-    {
-        return _hallwayEdges;
     }
 
     #endregion
@@ -166,14 +160,27 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         return edges;
     }
 
-    private Edge[] GetHallwayEdges(RoomBehavior[] mainRooms, Edge[] mst)
+    private HallwayBehavior CreateHallway(Edge edge)
     {
-        List<Edge> edges = new List<Edge>();
+        HallwayBehavior newHallway = Instantiate(hallwayPrefab, transform);
+
+        Vector2 pos = Vector2.Lerp(edge.point0.position, edge.point1.position, 0.5f);
+        pos.x = Mathf.Round(pos.x);
+        pos.y = Mathf.Round(pos.y);
+        newHallway.transform.localPosition = pos;
+        newHallway.transform.localScale = new Vector2(Mathf.Abs((edge.point0.position - edge.point1.position).x), Mathf.Abs((edge.point0.position - edge.point1.position).y))+2*Vector2.one;
+
+        return newHallway;
+    }
+    
+    private HallwayBehavior[] CreateHallways(Edge[] mst)
+    {
+        List<HallwayBehavior> hallways = new();
         
         foreach (var edge in mst)
         {
-            RoomBehavior room0 = mainRooms.FirstOrDefault(x => x.Index == edge.point0.index);
-            RoomBehavior room1 = mainRooms.FirstOrDefault(x => x.Index == edge.point1.index);
+            RoomBehavior room0 = _mainRooms.FirstOrDefault(x => x.Index == edge.point0.index);
+            RoomBehavior room1 = _mainRooms.FirstOrDefault(x => x.Index == edge.point1.index);
             
             if(!room0 || !room1) continue;
 
@@ -190,8 +197,9 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
                 Vector2 room0Pos = new Vector2(middlePoint.x, room0.transform.position.y);
                 Vector2 room1Pos = new Vector2(middlePoint.x, room1.transform.position.y);
 
-                Edge hallway = new Edge(new Vertex(room0Pos, room0.Index), new Vertex(room1Pos, room1.Index));
-                edges.Add(hallway);
+                Edge hallwayEdge = new Edge(new Vertex(room0Pos, room0.Index), new Vertex(room1Pos, room1.Index));
+                HallwayBehavior hallway = CreateHallway(hallwayEdge);
+                hallways.Add(hallway);
             }
             
             // in y boundary
@@ -200,52 +208,55 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
                 Vector2 room0Pos = new Vector2(room0.transform.position.x, middlePoint.y);
                 Vector2 room1Pos = new Vector2(room1.transform.position.x, middlePoint.y);
 
-                Edge hallway = new Edge(new Vertex(room0Pos, room0.Index), new Vertex(room1Pos, room1.Index));
-                edges.Add(hallway);
+                Edge hallwayEdge = new Edge(new Vertex(room0Pos, room0.Index), new Vertex(room1Pos, room1.Index));
+                HallwayBehavior hallway = CreateHallway(hallwayEdge);
+                hallways.Add(hallway);
             }
             
             // L
             else
             {
-                //TODO: Create 'L' shaped hallway
+                Vector2 room0Pos = room0.transform.position;
+                Vector2 room1Pos = room1.transform.position;
+
+                Vector2 middlePos0 = new Vector2(room0Pos.x, room1Pos.y);
+                Vector2 middlePos1 = new Vector2(room1Pos.x, room0Pos.y);
+
+                int cnt0 = Physics2D.LinecastAll(room0Pos, middlePos0).Where(x => x.transform.GetComponent<IRoom>() != null).Count() + Physics2D.LinecastAll(middlePos0, room1Pos).Where(x => x.transform.GetComponent<IRoom>() != null).Count();
+                int cnt1 = Physics2D.LinecastAll(room0Pos, middlePos1).Where(x => x.transform.GetComponent<IRoom>() != null).Count() + Physics2D.LinecastAll(middlePos1, room1Pos).Where(x => x.transform.GetComponent<IRoom>() != null).Count();
+
+                if (cnt0 < cnt1)
+                {
+                    Edge edge0 = new Edge(new Vertex(room0Pos, room0.Index), new Vertex(middlePos0, -1));
+                    Edge edge1 = new Edge(new Vertex(middlePos0, -1), new Vertex(room1Pos, room1.Index));
+                    HallwayBehavior hallway0 = CreateHallway(edge0);
+                    HallwayBehavior hallway1 = CreateHallway(edge1);
+                    hallways.Add(hallway0);
+                    hallways.Add(hallway1);
+                }
+                else
+                {
+                    Edge edge0 = new Edge(new Vertex(room0Pos, room0.Index), new Vertex(middlePos1, -1));
+                    Edge edge1 = new Edge(new Vertex(middlePos1, -1), new Vertex(room1Pos, room1.Index));
+                    HallwayBehavior hallway0 = CreateHallway(edge0);
+                    HallwayBehavior hallway1 = CreateHallway(edge1);
+                    hallways.Add(hallway0);
+                    hallways.Add(hallway1);
+                }
             }
         }
 
-        return edges.ToArray();
+        return hallways.ToArray();
     }
 
-    private HallwayBehavior CreateHallway(Edge edge)
-    {
-        HallwayBehavior newHallway = Instantiate(hallwayPrefab, transform);
-
-        Vector2 pos = Vector2.Lerp(edge.point0.position, edge.point1.position, 0.5f);
-        pos.x = Mathf.Round(pos.x);
-        pos.y = Mathf.Round(pos.y);
-        newHallway.transform.localPosition = pos;
-        newHallway.transform.localScale = new Vector2(Mathf.Abs((edge.point0.position - edge.point1.position).x), Mathf.Abs((edge.point0.position - edge.point1.position).y))+2*Vector2.one;
-
-        return newHallway;
-    }
-
-    private HallwayBehavior[] GenerateHallways(Edge[] hallwayEdges)
-    {
-        HallwayBehavior[] hallways = new HallwayBehavior[hallwayEdges.Length];
-
-        for (int i = 0; i < hallwayEdges.Length; i++)
-        {
-            hallways[i] = CreateHallway(hallwayEdges[i]);
-        }
-        
-        return hallways;
-    }
-
-    private RoomBehavior[] GetResultRooms(Edge[] hallway)
+    private RoomBehavior[] GetResultRooms(HallwayBehavior[] hallways)
     {
         List<RoomBehavior> resultRooms = new();
-        foreach (var edge in hallway)
+        foreach (var hallway in hallways)
         {
-            RaycastHit2D[] rooms = Physics2D.LinecastAll(edge.point0.position, edge.point1.position, 1 << LayerMask.NameToLayer("Map"));
-            resultRooms.AddRange(rooms.Select(x => x.transform.GetComponent<RoomBehavior>()));
+            Transform hTr = hallway.transform;
+            Collider2D[] room = Physics2D.OverlapBoxAll(hTr.position, hTr.localScale, hTr.rotation.eulerAngles.z);
+            resultRooms.AddRange(room.Select(x => x.GetComponent<RoomBehavior>()).Where(x => x != null));
         }
         
         resultRooms.AddRange(_mainRooms);
@@ -271,13 +282,10 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         _minimumEdges = new MinimumSpanningTree(_edges, randomPathValue).GetSpanningTree();
         
         // get hallway edges
-        _hallwayEdges = GetHallwayEdges(_mainRooms, _minimumEdges);
-
-        // create Hallways
-        _hallways = GenerateHallways(_hallwayEdges);
+        _hallways = CreateHallways(_minimumEdges);
         
         // get result rooms
-        _resultRooms = GetResultRooms(_hallwayEdges);
+        _resultRooms = GetResultRooms(_hallways);
         ActiveOnly(_resultRooms); // for debug
 
         // back to normal time scale
