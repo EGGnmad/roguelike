@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e719b40e57a442da297956db1813fed, type: 3}
+  m_Name: Floor 2
+  m_EditorClassIdentifier: 
+  _id: 2
+  _tile: {fileID: 11400000, guid: 4d465a4614770714680a62f6f9b142ef, type: 2}
+  _upCells:
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
+  - {fileID: 11400000, guid: 0e3fe505acf3c4fe391b28809fd122b8, type: 2}
+  _downCells:
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
+  - {fileID: 11400000, guid: 0e3fe505acf3c4fe391b28809fd122b8, type: 2}
+  _leftCells:
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
+  - {fileID: 11400000, guid: 0e3fe505acf3c4fe391b28809fd122b8, type: 2}
+  _rightCells:
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
+  - {fileID: 11400000, guid: 0e3fe505acf3c4fe391b28809fd122b8, type: 2}

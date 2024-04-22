@@ -19,7 +19,7 @@ namespace MapGeneration
         
         #endregion
         
-        #region Delaunay
+        #region Methods:Delaunay
         
         public static implicit operator Vertex(RoomBehavior room)
         {
@@ -28,7 +28,7 @@ namespace MapGeneration
 
         #endregion
 
-        #region SteeringBehavior
+        #region Methods:SteeringBehavior
 
         private void Start()
         {

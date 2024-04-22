@@ -4,32 +4,34 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using DelaunayTriangulation;
 using MapGeneration;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 using Random = UnityEngine.Random;
 
-public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation, ISpanningTree
+public class MapGenerator : MonoBehaviour, IGenerator, IMapGenerator, IDelaunayTriangulation, ISpanningTree
 {
     #region Fields:Serialized
 
-    [Header("Generation:Config")] public float boostTimeScale = 50;
-    [SerializeField] private RoomBehavior roomPrefab;
-    [SerializeField] private HallwayBehavior hallwayPrefab;
+    [TabGroup("Config")] public float boostTimeScale = 50;
+    [TabGroup("Config"), Required, AssetsOnly, SerializeField] private RoomBehavior roomPrefab;
+    [TabGroup("Config"), Required, AssetsOnly, SerializeField] private HallwayBehavior hallwayPrefab;
 
-    [Header("Generation:Room")] public float radius;
-    public int minRoomSize;
-    public int maxRoomSize;
-    public int maxRoomCount;
+    [TabGroup("Room"), Unit(Units.Meter)] public float radius;
+    [TabGroup("Room")] public int minRoomSize;
+    [TabGroup("Room")] public int maxRoomSize;
+    [TabGroup("Room")] public int maxRoomCount;
 
-    [Header("Generation:MST")] [Range(0, 1)]
-    public float randomPathValue = 0.1f;
+    [TabGroup("MST"), Range(0, 1)] public float randomPathValue = 0.1f;
 
     #endregion
 
     #region Fields:private
-
+    [Inject] private IObjectResolver _container;
+    
     private RoomBehavior[] _rooms;
     private RoomBehavior[] _mainRooms;
-    private RoomBehavior[] _resultRooms;
     private Edge[] _edges;
     private Edge[] _minimumEdges;
     private HallwayBehavior[] _hallways;
@@ -68,7 +70,7 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
 
     private RoomBehavior CreateRoom(Vector2 pos, Vector2 size, int index)
     {
-        RoomBehavior newRoom = Instantiate(roomPrefab, transform);
+        RoomBehavior newRoom = _container.Instantiate(roomPrefab, transform);
 
         newRoom.transform.localPosition = pos;
         newRoom.transform.localScale = size;
@@ -162,7 +164,7 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
 
     private HallwayBehavior CreateHallway(Edge edge)
     {
-        HallwayBehavior newHallway = Instantiate(hallwayPrefab, transform);
+        HallwayBehavior newHallway = _container.Instantiate(hallwayPrefab, transform);
 
         Vector2 pos = Vector2.Lerp(edge.point0.position, edge.point1.position, 0.5f);
         pos.x = Mathf.Round(pos.x);
@@ -222,8 +224,8 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
                 Vector2 middlePos0 = new Vector2(room0Pos.x, room1Pos.y);
                 Vector2 middlePos1 = new Vector2(room1Pos.x, room0Pos.y);
 
-                int cnt0 = Physics2D.LinecastAll(room0Pos, middlePos0).Where(x => x.transform.GetComponent<IRoom>() != null).Count() + Physics2D.LinecastAll(middlePos0, room1Pos).Where(x => x.transform.GetComponent<IRoom>() != null).Count();
-                int cnt1 = Physics2D.LinecastAll(room0Pos, middlePos1).Where(x => x.transform.GetComponent<IRoom>() != null).Count() + Physics2D.LinecastAll(middlePos1, room1Pos).Where(x => x.transform.GetComponent<IRoom>() != null).Count();
+                int cnt0 = Physics2D.LinecastAll(room0Pos, middlePos0).Where(x => x.transform.GetComponent<HallwayBehavior>() != null).Count() + Physics2D.LinecastAll(middlePos0, room1Pos).Where(x => x.transform.GetComponent<HallwayBehavior>() != null).Count();
+                int cnt1 = Physics2D.LinecastAll(room0Pos, middlePos1).Where(x => x.transform.GetComponent<HallwayBehavior>() != null).Count() + Physics2D.LinecastAll(middlePos1, room1Pos).Where(x => x.transform.GetComponent<HallwayBehavior>() != null).Count();
 
                 if (cnt0 < cnt1)
                 {
@@ -262,6 +264,10 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         resultRooms.AddRange(_mainRooms);
         return resultRooms.Distinct().ToArray();
     }
+
+    private void FillRooms()
+    {
+    }
     
     public async UniTask Generate()
     {
@@ -285,10 +291,14 @@ public class MapGenerator : MonoBehaviour, IMapGenerator, IDelaunayTriangulation
         _hallways = CreateHallways(_minimumEdges);
         
         // get result rooms
-        _resultRooms = GetResultRooms(_hallways);
-        ActiveOnly(_resultRooms); // for debug
+        var mainRooms = GetResultRooms(_hallways);
+        ActiveOnly(mainRooms); // for debug
+        _rooms = mainRooms;
+        
+        // fill rooms
+        FillRooms();
 
-        // back to normal time scale
+        // back to normal timescale
         Time.timeScale = 1f;
     }
 
