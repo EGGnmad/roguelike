@@ -4,14 +4,14 @@ using UnityEngine.Tilemaps;
 
 namespace MapGeneration
 {
-    public abstract class CellBase : ScriptableObject
+    public abstract class CellInfoBase : ScriptableObject
     {
         [PreviewField(height:64, ObjectFieldAlignment.Center), HideLabel, SerializeField] private TileBase _tile;
         
         public virtual TileBase GetTile() => _tile;
-        public abstract CellBase[] GetUpCells();
-        public abstract CellBase[] GetDownCells();
-        public abstract CellBase[] GetLeftCells();
-        public abstract CellBase[] GetRightCells();
+        public abstract CellInfoBase[] GetUpCells();
+        public abstract CellInfoBase[] GetDownCells();
+        public abstract CellInfoBase[] GetLeftCells();
+        public abstract CellInfoBase[] GetRightCells();
     }
 }

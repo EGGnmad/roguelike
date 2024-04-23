@@ -4,8 +4,8 @@ using UnityEngine;
 namespace MapGeneration
 {
     [CreateAssetMenu(menuName = "WFC/Cell Map")]
-    public class CellMap : ScriptableObject
+    public class CellInfoMap : ScriptableObject
     {
-        [TableList, HideDuplicateReferenceBox] public CellBase[] cells;
+        [TableList, HideDuplicateReferenceBox] public CellInfoBase[] cells;
     }
 }
