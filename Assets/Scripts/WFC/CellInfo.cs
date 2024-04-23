@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MapGeneration
 {
-    [CreateAssetMenu(menuName = "WFC/Cell")]
+    [CreateAssetMenu(menuName = "WFC/Cell Info")]
     public class CellInfo : CellInfoBase
     {
         [TableList, HideDuplicateReferenceBox, HideInTables, SerializeField] private CellInfoBase[] _upCells;
