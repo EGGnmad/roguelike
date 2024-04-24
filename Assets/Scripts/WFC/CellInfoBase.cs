@@ -6,7 +6,9 @@ namespace MapGeneration
 {
     public abstract class CellInfoBase : ScriptableObject
     {
-        [PreviewField(height:64, ObjectFieldAlignment.Center), HideLabel, SerializeField] private TileBase _tile;
+        public int id;
+        [PreviewField(height:64, ObjectFieldAlignment.Center), HideLabel, SerializeField] 
+        private TileBase _tile;
         
         public virtual TileBase GetTile() => _tile;
         public abstract CellInfoBase[] GetUpCells();

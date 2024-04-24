@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e719b40e57a442da297956db1813fed, type: 3}
   m_Name: Floor 2
   m_EditorClassIdentifier: 
-  _id: 2
+  id: 2
   _tile: {fileID: 11400000, guid: 4d465a4614770714680a62f6f9b142ef, type: 2}
   _upCells:
   - {fileID: 11400000}
