@@ -10,7 +10,7 @@ using VContainer;
 using VContainer.Unity;
 using Random = UnityEngine.Random;
 
-public class MapGenerator : MonoBehaviour, IGenerator, IMapGenerator, IDelaunayTriangulation, ISpanningTree
+public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDelaunayTriangulation, ISpanningTree
 {
     #region Fields:Serialized
 
@@ -265,8 +265,23 @@ public class MapGenerator : MonoBehaviour, IGenerator, IMapGenerator, IDelaunayT
         return resultRooms.Distinct().ToArray();
     }
 
-    private void FillRooms()
+    private void RoomsGeneration()
     {
+        foreach (var hallway in _hallways)
+        {
+            foreach (var generator in hallway.GetComponents<IGenerator>())
+            {
+                generator.Generate();
+            }
+        }
+        
+        foreach (var room in _rooms)
+        {
+            foreach (var generator in room.GetComponents<IGenerator>())
+            {
+                generator.Generate();
+            }
+        }
     }
     
     public async UniTask Generate()
@@ -296,7 +311,7 @@ public class MapGenerator : MonoBehaviour, IGenerator, IMapGenerator, IDelaunayT
         _rooms = mainRooms;
         
         // fill rooms
-        FillRooms();
+        RoomsGeneration();
 
         // back to normal timescale
         Time.timeScale = 1f;

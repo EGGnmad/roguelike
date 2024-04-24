@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5083348417866397451}
   - component: {fileID: -2415354391496873410}
   - component: {fileID: 8294183153242301896}
+  - component: {fileID: -5949341364416606533}
   m_Layer: 8
   m_Name: Room
   m_TagString: Untagged
@@ -106,3 +107,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomColor: {r: 0, g: 0.5764706, b: 1, a: 1}
   textColor: {r: 0, g: 0.5803922, b: 1, a: 1}
+--- !u!114 &-5949341364416606533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8522682689396382561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f705ff4bfc64b098a02e604e9f1051b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 115756713
+  _cellInfoMap: {fileID: 11400000, guid: 029f1c2b6346846d0be8e13cba8b8e76, type: 2}
