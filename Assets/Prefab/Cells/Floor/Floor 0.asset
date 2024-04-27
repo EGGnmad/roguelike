@@ -9,24 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e719b40e57a442da297956db1813fed, type: 3}
+  m_Script: {fileID: 11500000, guid: d49147329f7944b1899a36cf695fc43b, type: 3}
   m_Name: Floor 0
   m_EditorClassIdentifier: 
-  id: 0
-  _tile: {fileID: 11400000, guid: 0542e8491459c5c44b06e33bc7745204, type: 2}
+  sprite: {fileID: 1322524545, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
   _upCells:
+  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
+  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
   - {fileID: 11400000}
-  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
-  - {fileID: 11400000, guid: 5dbbf558c78b749e89f3ac4db6db9195, type: 2}
   _downCells:
+  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
+  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
   - {fileID: 11400000}
-  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
-  - {fileID: 11400000, guid: 5dbbf558c78b749e89f3ac4db6db9195, type: 2}
   _leftCells:
+  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
+  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
   - {fileID: 11400000}
-  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
-  - {fileID: 11400000, guid: 5dbbf558c78b749e89f3ac4db6db9195, type: 2}
   _rightCells:
+  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
+  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
   - {fileID: 11400000}
-  - {fileID: 11400000, guid: 3f1cc06cca0d745a5a4953e09e36a2a2, type: 2}
-  - {fileID: 11400000, guid: 5dbbf558c78b749e89f3ac4db6db9195, type: 2}

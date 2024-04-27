@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4337544102948668615}
   - component: {fileID: 2696226073204147097}
   - component: {fileID: -6671719900145631100}
-  - component: {fileID: -4027629862889798356}
   m_Layer: 8
   m_Name: Hallway
   m_TagString: Untagged
@@ -60,18 +59,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomColor: {r: 1, g: 1, b: 0, a: 1}
   textColor: {r: 1, g: 1, b: 0, a: 1}
---- !u!114 &-4027629862889798356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8522682689396382561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f705ff4bfc64b098a02e604e9f1051b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 1516631743
-  _cellInfoMap: {fileID: 11400000, guid: 029f1c2b6346846d0be8e13cba8b8e76, type: 2}
-  _fillLayer: 0

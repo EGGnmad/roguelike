@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e719b40e57a442da297956db1813fed, type: 3}
+  m_Script: {fileID: 11500000, guid: d49147329f7944b1899a36cf695fc43b, type: 3}
   m_Name: Tower 0
   m_EditorClassIdentifier: 
-  id: 0
-  _tile: {fileID: 0}
-  _upCells: []
-  _downCells: []
-  _leftCells: []
-  _rightCells: []
+  sprite: {fileID: 0}
+  socketUp: 0
+  socketDown: 0
+  socketLeft: 0
+  socketRight: 0
