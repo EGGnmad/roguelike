@@ -10,9 +10,9 @@ namespace MapGeneration
     {
         #region Fields:Private
 
-        private Random _random;
-        private int _width, _height;
-        private CellSuperposition[,] _cells;
+        protected Random _random;
+        protected int _width, _height;
+        protected CellSuperposition[,] _cells;
 
         #endregion
         
@@ -62,7 +62,7 @@ namespace MapGeneration
 
         #region Methods:WFC
 
-        protected Vector2Int GetMinEntropyPos()
+        protected virtual Vector2Int GetMinEntropyPos()
         {
             Vector2Int pos = Vector2Int.zero;
             int minEntropy = -1;
@@ -88,7 +88,7 @@ namespace MapGeneration
             return pos;
         }
 
-        protected IReadOnlyList<Vector2Int> GetPossibleDirections(Vector2Int pos)
+        protected virtual IReadOnlyList<Vector2Int> GetPossibleDirections(Vector2Int pos)
         {
             List<Vector2Int> result = new();
             

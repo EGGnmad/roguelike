@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tower 1
   m_EditorClassIdentifier: 
   sprite: {fileID: -689276907, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
-  socketUp: 1
-  socketDown: 1
+  socketUp: 3
+  socketDown: 3
   socketLeft: 1
   socketRight: 1
