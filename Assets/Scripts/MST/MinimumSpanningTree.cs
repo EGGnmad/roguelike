@@ -6,12 +6,12 @@ public class MinimumSpanningTree : ISpanningTree
 {
     public float randomPathValue;
     private Edge[] _edges;
-    private Dictionary<int, int> _parent;
+    private DisjointSet<int> _disjoint;
     
     public MinimumSpanningTree(Edge[] edges, float pathValue = 0f)
     {
         _edges = edges;
-        _parent = new Dictionary<int, int>();
+        _disjoint = new DisjointSet<int>();
 
         randomPathValue = pathValue;
     }
@@ -27,7 +27,7 @@ public class MinimumSpanningTree : ISpanningTree
             int a = _edges[i].point0.index;
             int b = _edges[i].point1.index;
 
-            if (Find(a) == Find(b))
+            if (_disjoint.Find(a) == _disjoint.Find(b))
             {
                 if (UnityEngine.Random.value < randomPathValue)
                 {
@@ -36,30 +36,10 @@ public class MinimumSpanningTree : ISpanningTree
                 continue;
             }
             
-            Union(a, b);
+            _disjoint.Union(a, b);
             results.Add(_edges[i]);
         }
 
         return results.ToArray();
     }
-
-    #region UnionFind
-
-    private int Find(int a)
-    {
-        if(!_parent.ContainsKey(a)) _parent.Add(a, a);
-        
-        if (_parent[a] == a) return a;
-        return _parent[a] = Find(_parent[a]);
-    }
-    
-    private void Union(int a, int b)
-    {
-        a = Find(a);
-        b = Find(b);
-
-        _parent[b] = a;
-    }
-
-    #endregion
 }
