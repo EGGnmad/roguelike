@@ -8,12 +8,13 @@ namespace MapGeneration
     public enum GlobalMapLayer
     {
         Floor,
-        Floor2,
+        Hallway,
         Obstacle
     }
     
     public class GlobalMap : SerializedMonoBehaviour
     {
+        public Tilemap this[GlobalMapLayer layer] => _tilemaps[layer]; 
         public Tilemap CurrentTilemap => _tilemaps[_layer];
         
         [SerializeField] private Dictionary<GlobalMapLayer, Tilemap> _tilemaps;

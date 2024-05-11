@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49147329f7944b1899a36cf695fc43b, type: 3}
   m_Name: Tower 11
   m_EditorClassIdentifier: 
-  sprite: {fileID: -1121105805, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
-  socketUp: 0
-  socketDown: 8
-  socketLeft: 9
-  socketRight: 9
+  sprite: {fileID: -21802395, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
+  socketUp: -1
+  socketDown: -1
+  socketLeft: -1
+  socketRight: -1

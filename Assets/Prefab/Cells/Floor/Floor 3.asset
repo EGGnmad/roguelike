@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d49147329f7944b1899a36cf695fc43b, type: 3}
-  m_Name: Tower 0
+  m_Name: Floor 3
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
-  socketUp: 0
-  socketDown: 0
-  socketLeft: 0
-  socketRight: 0
+  sprite: {fileID: -32782646, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
+  socketUp: -1
+  socketDown: -1
+  socketLeft: -1
+  socketRight: -1

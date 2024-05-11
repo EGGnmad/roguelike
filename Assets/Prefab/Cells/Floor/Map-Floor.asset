@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8661e0a296564ec287b1bcd5b118abf0, type: 3}
-  m_Name: Floor TileMap
+  m_Name: Map-Floor
   m_EditorClassIdentifier: 
   cellTiles:
   - {fileID: 11400000, guid: 0e3fe505acf3c4fe391b28809fd122b8, type: 2}

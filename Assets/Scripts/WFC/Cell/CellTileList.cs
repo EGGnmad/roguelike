@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MapGeneration
 {
     [CreateAssetMenu(menuName = "WFC/CellTileMap")]
-    public class CellTileMap : ScriptableObject
+    public class CellTileList : ScriptableObject
     {
         [TableList] public CellTile[] cellTiles;
     }

@@ -6,7 +6,7 @@ using Random = System.Random;
 
 namespace MapGeneration
 {
-    public class WaveFunctionCollapse : IWaveFunctionCollapse, ISuperposition
+    public class WaveFunctionCollapse
     {
         #region Fields:Private
 
@@ -17,9 +17,7 @@ namespace MapGeneration
         #endregion
         
         #region Fields:Abstract
-
-        public CellSuperposition[,] Cells => _cells;
-
+        
         public bool IsCollapsed
         {
             get
@@ -57,6 +55,14 @@ namespace MapGeneration
             }
         }
 
+        public WaveFunctionCollapse(CellSuperposition[,] cells, Random random)
+        {
+            _random = random;
+            _width = cells.GetLength(0);
+            _height = cells.GetLength(1);
+            
+            _cells = cells;
+        }
 
         #endregion
 
@@ -114,17 +120,17 @@ namespace MapGeneration
                     Vector2Int newPos = current + direction;
                     CellSuperposition otherCellSuper = _cells[newPos.x, newPos.y];
                     
-                    if(otherCellSuper.cells.Count == 0) continue;
+                    if(!otherCellSuper.Possibilities.Any()) continue;
 
-                    List<int> currentSockets = _cells[current.x, current.y].cells.Select(x => x[direction]).ToList();
+                    List<int> currentSockets = _cells[current.x, current.y].Possibilities.Select(x => x[direction]).ToList();
                     
-                    foreach (var cell in otherCellSuper.cells.ToList())
+                    foreach (var cell in otherCellSuper.Possibilities.ToList())
                     {
                         int otherSocket = cell[-direction];
                         
                         if (!currentSockets.Contains(otherSocket))
                         {
-                            otherCellSuper.cells.Remove(cell);
+                            otherCellSuper.RemovePossibility(cell);
                             if (!stack.Contains(newPos))
                             {
                                 stack.Push(newPos);
@@ -150,13 +156,13 @@ namespace MapGeneration
             {
                 for (int j = 0; j < _cells.GetLength(1); j++)
                 {
-                    cellTiles[i, j] = _cells[i, j].cells[0];
+                    cellTiles[i, j] = _cells[i, j].Possibilities.First();
                 }
             }
 
             return cellTiles;
         }
-
+        
         #endregion
     }
 }

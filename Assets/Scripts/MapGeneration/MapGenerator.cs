@@ -14,6 +14,13 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
 {
     #region Fields:Serialized
 
+    [TabGroup("Step")] public bool generateRooms = true;
+    [TabGroup("Step")] public bool delaunay = true;
+    [TabGroup("Step")] public bool mst = true;
+    [TabGroup("Step")] public bool generateHallways = true;
+    [TabGroup("Step")] public bool fillRooms = true;
+    
+    
     [TabGroup("Config")] public float boostTimeScale = 50;
     [TabGroup("Config"), Required, AssetsOnly, SerializeField] private RoomBehavior roomPrefab;
     [TabGroup("Config"), Required, AssetsOnly, SerializeField] private HallwayBehavior hallwayPrefab;
@@ -290,6 +297,11 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         Time.timeScale = boostTimeScale;
 
         // generate rooms
+        if (!generateRooms)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
         _rooms = GenerateRooms(maxRoomCount);
         _mainRooms = GetMainRooms(_rooms);
 
@@ -297,12 +309,27 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         await SeperationTask(_rooms);
 
         // get delaunay triangles(mesh)
+        if (!delaunay)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
         _edges = GetEdges(_mainRooms);
 
         // get MST
+        if (!mst)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
         _minimumEdges = new MinimumSpanningTree(_edges, randomPathValue).GetSpanningTree();
         
         // get hallway edges
+        if (!generateHallways)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
         _hallways = CreateHallways(_minimumEdges);
         
         // get result rooms
@@ -311,6 +338,11 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         _rooms = mainRooms;
         
         // fill rooms
+        if (!fillRooms)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
         RoomsGeneration();
 
         // back to normal timescale

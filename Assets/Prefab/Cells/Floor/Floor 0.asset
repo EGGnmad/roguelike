@@ -13,19 +13,7 @@ MonoBehaviour:
   m_Name: Floor 0
   m_EditorClassIdentifier: 
   sprite: {fileID: 1322524545, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
-  _upCells:
-  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
-  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
-  - {fileID: 11400000}
-  _downCells:
-  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
-  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
-  - {fileID: 11400000}
-  _leftCells:
-  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
-  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
-  - {fileID: 11400000}
-  _rightCells:
-  - {fileID: 11400000, guid: 61730c121a5514d24ac823a22445f6f8, type: 2}
-  - {fileID: 11400000, guid: 16d8ebe05951b4519b34c08d3d16df84, type: 2}
-  - {fileID: 11400000}
+  socketUp: -1
+  socketDown: -1
+  socketLeft: -1
+  socketRight: -1

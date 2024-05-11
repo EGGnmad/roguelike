@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4337544102948668615}
   - component: {fileID: 2696226073204147097}
   - component: {fileID: -6671719900145631100}
-  - component: {fileID: 1793426046091621896}
+  - component: {fileID: -4508874909601478440}
   m_Layer: 8
   m_Name: Hallway
   m_TagString: Untagged
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomColor: {r: 1, g: 1, b: 0, a: 1}
   textColor: {r: 1, g: 1, b: 0, a: 1}
---- !u!114 &1793426046091621896
+--- !u!114 &-4508874909601478440
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -69,9 +69,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8522682689396382561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f07ed1d5e5a844c287a7aaacbf356f56, type: 3}
+  m_Script: {fileID: 11500000, guid: da918fac203e445ab070ddedec9e8b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 1139928272
-  _layer: 0
-  _cellTileMap: {fileID: 11400000, guid: e2949cbd7b17e49abaa02ace8abc2857, type: 2}
+  loadCellTiles: {fileID: 11400000, guid: e2949cbd7b17e49abaa02ace8abc2857, type: 2}

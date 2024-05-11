@@ -6,41 +6,51 @@ namespace MapGeneration
 {
     public class CellSuperposition : ISuperposition
     {
-        public List<CellTile> cells;
-
-        private bool _isCollapsed;
-        private Random _random;
+        private List<CellTile> _cells;
+        private Random _random = new();
 
         #region Fields:Abstract
 
-        public bool IsCollapsed => _isCollapsed;
-        public int Entropy => cells.Count;
+        public bool IsCollapsed { get; private set; } = false;
+        public int Entropy => _cells.Count;
+        public IEnumerable<CellTile> Possibilities => _cells;
+        
         #endregion
 
         #region Methods:Ctor
 
         public CellSuperposition(IEnumerable<CellTile> defaultCells)
         {
-            _isCollapsed = false;
-            cells = new List<CellTile>(defaultCells);
-            _random = new Random();
+            _cells = new List<CellTile>(defaultCells);
         }
 
-        public CellSuperposition(IEnumerable<CellTile> defaultCells, Random random)
+        public CellSuperposition(IEnumerable<CellTile> defaultCells, Random random) : this(defaultCells)
         {
-            _isCollapsed = false;
-            cells = new List<CellTile>(defaultCells);
             _random = random;
+        }
+
+        public CellSuperposition(CellTile defaultCells)
+        {
+            IsCollapsed = true;
+            _cells = new();
+            _cells.Add(defaultCells);
         }
 
         #endregion
 
         public void Collapse()
         {
-            _isCollapsed = true;
-            CellTile temp = cells[_random.Next(cells.Count)];
-            cells.Clear();
-            cells.Add(temp);
+            if (IsCollapsed) return;
+            
+            IsCollapsed = true;
+            CellTile temp = _cells[_random.Next(_cells.Count)];
+            _cells.Clear();
+            _cells.Add(temp);
+        }
+
+        public void RemovePossibility(CellTile possibility)
+        {
+            _cells.Remove(possibility);
         }
     }
 }
