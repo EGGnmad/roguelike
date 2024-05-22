@@ -8,15 +8,14 @@ namespace DelaunayTriangulation
     public class Triangulation
     {
         private List<Triangle> m_Trinagles;
+
         public List<Triangle> triangles
         {
-            get
-            {
-                return m_Trinagles;
-            }
+            get { return m_Trinagles; }
         }
 
         private Rect m_BoundingBox;
+
         private Rect boundingBox
         {
             get
@@ -25,12 +24,10 @@ namespace DelaunayTriangulation
                 {
                     m_BoundingBox = new Rect(0, 0, 0, 0);
                 }
+
                 return m_BoundingBox;
             }
-            set
-            {
-                m_BoundingBox = value;
-            }
+            set { m_BoundingBox = value; }
         }
 
         public Triangulation()
@@ -42,7 +39,6 @@ namespace DelaunayTriangulation
         // triangulate, but only store tringles and allow insertion of points
         public Triangulation(List<Triangle> triangles)
         {
-
             m_Trinagles = triangles;
 
             // If there are triangles, create a bounding box
@@ -107,8 +103,11 @@ namespace DelaunayTriangulation
 
             // Make super triangle
             Vertex super0 = new Vertex(boundingBox.position - new Vector2(10f, 12f) * 100f, -1);
-            Vertex super1 = new Vertex(new Vector2(boundingBox.position.x + superWidth * 100f, boundingBox.position.y * 100f - .95f), -2);
-            Vertex super2 = new Vertex(new Vector2(boundingBox.position.x - .95f, boundingBox.position.y + superHeight * 100f), -3);
+            Vertex super1 =
+                new Vertex(
+                    new Vector2(boundingBox.position.x + superWidth * 100f, boundingBox.position.y * 100f - .95f), -2);
+            Vertex super2 =
+                new Vertex(new Vector2(boundingBox.position.x - .95f, boundingBox.position.y + superHeight * 100f), -3);
 
             Triangle super = new Triangle(super0, super1, super2);
 
@@ -258,4 +257,3 @@ namespace DelaunayTriangulation
         }
     }
 }
-

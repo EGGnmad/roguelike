@@ -11,6 +11,7 @@ namespace DelaunayTriangulation
         private Edge m_Edge0, m_Edge1, m_Edge2;
 
         private Vector2 m_CircumcircleCenter;
+
         private Vector2 circumcircleCenter
         {
             get
@@ -19,74 +20,49 @@ namespace DelaunayTriangulation
                 {
                     m_CircumcircleCenter = new Vector2();
                 }
+
                 return m_CircumcircleCenter;
             }
-            set
-            {
-                m_CircumcircleCenter = value;
-            }
+            set { m_CircumcircleCenter = value; }
         }
 
         private float m_CircumcircleRadius;
+
         private float circumcircleRadius
         {
-            get
-            {
-                return m_CircumcircleRadius;
-            }
+            get { return m_CircumcircleRadius; }
 
-            set
-            {
-                m_CircumcircleRadius = value;
-            }
+            set { m_CircumcircleRadius = value; }
         }
 
         public Vertex vertex0
         {
-            get
-            {
-                return m_Vertex0;
-            }
+            get { return m_Vertex0; }
         }
 
         public Vertex vertex1
         {
-            get
-            {
-                return m_Vertex1;
-            }
+            get { return m_Vertex1; }
         }
 
         public Vertex vertex2
         {
-            get
-            {
-                return m_Vertex2;
-            }
+            get { return m_Vertex2; }
         }
 
         public Edge edge0
         {
-            get
-            {
-                return m_Edge0;
-            }
+            get { return m_Edge0; }
         }
 
         public Edge edge1
         {
-            get
-            {
-                return m_Edge1;
-            }
+            get { return m_Edge1; }
         }
 
         public Edge edge2
         {
-            get
-            {
-                return m_Edge2;
-            }
+            get { return m_Edge2; }
         }
 
         public Triangle(Vertex p0, Vertex p1, Vertex p2, bool clockwise)
@@ -131,12 +107,26 @@ namespace DelaunayTriangulation
             // TODO: Find better solution for this.
             Vector2 circleCenter = new Vector2();
 
-            circleCenter.x = (len0Square * (vertex2.position.y - vertex1.position.y) + len1Square * (vertex0.position.y - vertex2.position.y) + len2Square * (vertex1.position.y - vertex0.position.y)) / (vertex0.position.x * (vertex2.position.y - vertex1.position.y) + vertex1.position.x * (vertex0.position.y - vertex2.position.y) + vertex2.position.x * (vertex1.position.y - vertex0.position.y)) / 2f;
-            circleCenter.y = (len0Square * (vertex2.position.x - vertex1.position.x) + len1Square * (vertex0.position.x - vertex2.position.x) + len2Square * (vertex1.position.x - vertex0.position.x)) / (vertex0.position.y * (vertex2.position.x - vertex1.position.x) + vertex1.position.y * (vertex0.position.x - vertex2.position.x) + vertex2.position.y * (vertex1.position.x - vertex0.position.x)) / 2f;
+            circleCenter.x =
+                (len0Square * (vertex2.position.y - vertex1.position.y) +
+                 len1Square * (vertex0.position.y - vertex2.position.y) +
+                 len2Square * (vertex1.position.y - vertex0.position.y)) /
+                (vertex0.position.x * (vertex2.position.y - vertex1.position.y) +
+                 vertex1.position.x * (vertex0.position.y - vertex2.position.y) +
+                 vertex2.position.x * (vertex1.position.y - vertex0.position.y)) / 2f;
+            circleCenter.y =
+                (len0Square * (vertex2.position.x - vertex1.position.x) +
+                 len1Square * (vertex0.position.x - vertex2.position.x) +
+                 len2Square * (vertex1.position.x - vertex0.position.x)) /
+                (vertex0.position.y * (vertex2.position.x - vertex1.position.x) +
+                 vertex1.position.y * (vertex0.position.x - vertex2.position.x) +
+                 vertex2.position.y * (vertex1.position.x - vertex0.position.x)) / 2f;
 
             m_CircumcircleCenter = circleCenter;
 
-            circumcircleRadius = Mathf.Sqrt(((vertex1.position.x - circumcircleCenter.x) * (vertex1.position.x - circumcircleCenter.x)) + ((vertex1.position.y - circumcircleCenter.y) * (vertex1.position.y - circumcircleCenter.y)));
+            circumcircleRadius =
+                Mathf.Sqrt(((vertex1.position.x - circumcircleCenter.x) * (vertex1.position.x - circumcircleCenter.x)) +
+                           ((vertex1.position.y - circumcircleCenter.y) * (vertex1.position.y - circumcircleCenter.y)));
         }
 
         public Triangle(Vertex p0, Vertex p1, Vertex p2) : this(p0, p1, p2, true)
@@ -210,13 +200,13 @@ namespace DelaunayTriangulation
             }
 
             bool isSame = m_Vertex0.Equals(other.vertex0) ||
-                m_Vertex0.Equals(other.vertex1) || m_Vertex0.Equals(other.vertex2);
+                          m_Vertex0.Equals(other.vertex1) || m_Vertex0.Equals(other.vertex2);
 
             isSame &= m_Vertex1.Equals(other.vertex0) ||
-                m_Vertex1.Equals(other.vertex1) || m_Vertex1.Equals(other.vertex2);
+                      m_Vertex1.Equals(other.vertex1) || m_Vertex1.Equals(other.vertex2);
 
             isSame &= m_Vertex2.Equals(other.vertex0) ||
-                m_Vertex2.Equals(other.vertex1) || m_Vertex2.Equals(other.vertex2);
+                      m_Vertex2.Equals(other.vertex1) || m_Vertex2.Equals(other.vertex2);
 
             return isSame;
         }
@@ -231,6 +221,5 @@ namespace DelaunayTriangulation
 
             return combined;
         }
-
     }
 }

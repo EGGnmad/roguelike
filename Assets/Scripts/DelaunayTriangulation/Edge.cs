@@ -8,30 +8,24 @@ namespace DelaunayTriangulation
     public class Edge : IComparable<Edge>
     {
         private float m_Length;
+
         public float length
         {
-            get
-            {
-                return m_Length;
-            }
+            get { return m_Length; }
         }
 
         private Vertex m_Point0;
+
         public Vertex point0
         {
-            get
-            {
-                return m_Point0;
-            }
+            get { return m_Point0; }
         }
 
         private Vertex m_Point1;
+
         public Vertex point1
         {
-            get
-            {
-                return m_Point1;
-            }
+            get { return m_Point1; }
         }
 
         public Edge(Vertex point0, Vertex point1)
@@ -62,7 +56,7 @@ namespace DelaunayTriangulation
 
                 return isSame;
             }
-            
+
             return false;
         }
 
