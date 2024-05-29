@@ -8,6 +8,7 @@ namespace MapGeneration
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<GlobalMap>();
+            builder.RegisterComponentInHierarchy<MapGenerator>();
         }
     }
 }

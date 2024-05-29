@@ -6,11 +6,12 @@ using DelaunayTriangulation;
 using MapGeneration;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using VContainer;
 using VContainer.Unity;
 using Random = UnityEngine.Random;
 
-public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDelaunayTriangulation, ISpanningTree
+public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDelaunayTriangulation, ISpanningTree, IProcessor
 {
     #region Fields:Serialized
 
@@ -19,7 +20,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
     [TabGroup("Step")] public bool mst = true;
     [TabGroup("Step")] public bool generateHallways = true;
     [TabGroup("Step")] public bool fillRooms = true;
-    
+    [TabGroup("Step")] public bool setColliders = true;
     
     [TabGroup("Config")] public float boostTimeScale = 50;
     [TabGroup("Config"), Required, AssetsOnly, SerializeField] private RoomBehavior roomPrefab;
@@ -36,12 +37,16 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
 
     #region Fields:private
     [Inject] private IObjectResolver _container;
+    [Inject] private GlobalMap _globalMap;
     
     private RoomBehavior[] _rooms;
     private RoomBehavior[] _mainRooms;
     private Edge[] _edges;
     private Edge[] _minimumEdges;
     private HallwayBehavior[] _hallways;
+    
+    // IProcessor
+    private float _percentage;
 
     #endregion
 
@@ -61,14 +66,10 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
     {
         return _minimumEdges;
     }
-
-    #endregion
-
-    #region Methods:UnityLifeCycle
-
-    private void Start()
+    
+    public float GetProgress()
     {
-        UniTask.Create(Generate);
+        return _percentage;
     }
 
     #endregion
@@ -290,6 +291,25 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
             }
         }
     }
+
+    private void SetColliders()
+    {
+        _globalMap.SetLayer(GlobalMapLayer.Collider);
+
+        // 공백 타일 (콜라이더를 채우기 위함)
+        CellTile blankTile = ScriptableObject.CreateInstance<CellTile>();
+
+        foreach (var position in _globalMap[GlobalMapLayer.Floor].cellBounds.allPositionsWithin)
+        {
+            if(_globalMap[GlobalMapLayer.Floor].GetTile(position) != null) continue;
+            
+            _globalMap.CurrentTilemap.SetTile(position, blankTile);
+            _globalMap.CurrentTilemap.SetColliderType(position, Tile.ColliderType.Grid);
+        }
+        
+        _globalMap.CurrentTilemap.GetComponent<TilemapCollider2D>().ProcessTilemapChanges();
+        _globalMap.CurrentTilemap.GetComponent<CompositeCollider2D>().GenerateGeometry();
+    }
     
     public async UniTask Generate()
     {
@@ -304,9 +324,11 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         }
         _rooms = GenerateRooms(maxRoomCount);
         _mainRooms = GetMainRooms(_rooms);
+        _percentage = 0.05f; // 퍼센트 5%
 
         // wait until SeperationTask end
         await SeperationTask(_rooms);
+        _percentage = 0.3f; // 퍼센트 30%
 
         // get delaunay triangles(mesh)
         if (!delaunay)
@@ -336,6 +358,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         var mainRooms = GetResultRooms(_hallways);
         ActiveOnly(mainRooms); // for debug
         _rooms = mainRooms;
+        _percentage = 0.6f; // 퍼센트 60%
         
         // fill rooms
         if (!fillRooms)
@@ -344,9 +367,22 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
             return;
         }
         RoomsGeneration();
+        _percentage = 0.8f; // 퍼센트 80%
+        
+        // 플레이어가 통과하지 못 하게 벽을 만든다.
+        if (!setColliders)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
+        SetColliders();
+        
+        ActiveOnly();
 
         // back to normal timescale
         Time.timeScale = 1f;
+        
+        _percentage = 1f; // 퍼센트 100%
     }
 
     #endregion

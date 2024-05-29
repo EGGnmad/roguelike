@@ -8,8 +8,7 @@ namespace MapGeneration
     public enum GlobalMapLayer
     {
         Floor,
-        Hallway,
-        Obstacle
+        Collider
     }
     
     public class GlobalMap : SerializedMonoBehaviour
