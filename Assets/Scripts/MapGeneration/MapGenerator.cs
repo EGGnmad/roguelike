@@ -66,6 +66,11 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
     {
         return _minimumEdges;
     }
+
+    public string GetProcessName()
+    {
+        return "맵 생성 중...";
+    }
     
     public float GetProgress()
     {
@@ -328,7 +333,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
 
         // wait until SeperationTask end
         await SeperationTask(_rooms);
-        _percentage = 0.3f; // 퍼센트 30%
+        _percentage = 0.5f; // 퍼센트 30%
 
         // get delaunay triangles(mesh)
         if (!delaunay)

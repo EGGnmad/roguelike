@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadingManager : MonoBehaviour
+public class LoadingView : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _infoText;
     [SerializeField] private Slider _slider;
 
     private IProcessor _processor;
@@ -17,6 +19,7 @@ public class LoadingManager : MonoBehaviour
     public void StartLoading(IProcessor processor)
     {
         _processor = processor;
+        _infoText.text = string.Format(_infoText.text, processor.GetProcessName());
     }
 
     public void StopLoading()
