@@ -1,6 +1,6 @@
 namespace Game.Loading
 {
-    public class LoadingManager
+    public class AsyncOperationProcessor
     {
         
     }
