@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -5,9 +6,11 @@ using UnityEngine;
 public class Player : MonoBehaviour, IControllable
 {
     #region Fields:Serialized
-    
-    [TabGroup("Stats"), HideLabel] public CharacterStats stats;
 
+    [TabGroup("Stats"), HideLabel] public CharacterStats stats;
+    [TabGroup("Inventory"), HideLabel] public Inventory inventory;
+
+    public Item test;
     #endregion
 
     #region Fields:private
@@ -18,15 +21,28 @@ public class Player : MonoBehaviour, IControllable
     
     #endregion
 
+    private void Awake()
+    {
+        inventory = new Inventory(15, this);
+    }
+
     private void Start()
     {
         _rigid = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
+
+        inventory.AddItem(test);
+        inventory.AddItem(test);
     }
 
     public void Move(Vector2 dir)
     {
         _force = dir * stats.speed;
+        
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            inventory.AddItem(test);
+        }
     }
 
     public void FixedUpdate()

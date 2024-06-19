@@ -5,6 +5,6 @@ public class GameDependencyInstaller : LifetimeScope
 {
     protected override void Configure(IContainerBuilder builder)
     {
-        builder.RegisterComponentInHierarchy<MapGenerator>();
+        builder.RegisterComponentInHierarchy<Player>();
     }
 }

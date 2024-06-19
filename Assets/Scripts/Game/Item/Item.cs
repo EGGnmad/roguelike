@@ -1,11 +1,30 @@
-public class Item
-{
-    public string Name { get; set; }
-    public string Description { get; set; }
+using System.Collections;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
-    public Item(string name, string description)
+[CreateAssetMenu(menuName = "Game/Item")]
+public class Item : ScriptableObject, IComparer
+{
+    [PreviewField]
+    public Sprite icon;
+    public new string name;
+    public int stackSize = 1;
+    
+    [Multiline]
+    public string description;
+
+    public virtual void Use(Player player)
     {
-        Name = name;
-        Description = description;
+    }
+
+    public int Compare(object x, object y)
+    {
+        Item itemX = x as Item;
+        Item itemY = y as Item;
+        
+        if (itemX == null || itemY == null) return -1;
+        if (itemX.name != itemY.name) return -1;
+
+        return 0;
     }
 }

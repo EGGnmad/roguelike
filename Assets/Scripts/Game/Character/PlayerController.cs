@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
     // 원래 인터페이스는 유니티 에디터 상에서 보이지 않지만 ShowInInspector를 사용하면 가능하다. (for Test)
     [ShowInInspector] private IControllable _character;
