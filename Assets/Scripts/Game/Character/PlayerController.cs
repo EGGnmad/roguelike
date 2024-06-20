@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,6 +10,12 @@ public class PlayerController : MonoBehaviour, IController
     public void ControlStart(IControllable character)
     {
         _character = character;
+    }
+
+    private void Start()
+    {
+        IControllable player = GameObject.FindWithTag("Player")?.GetComponent<IControllable>();
+        ControlStart(player);
     }
 
     public void Update()

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
+[RequireComponent(typeof(Button))]
 public class ItemSlotView : MonoBehaviour
 {
     public Image icon;
@@ -11,6 +12,7 @@ public class ItemSlotView : MonoBehaviour
     
     [Inject] private Player _player;
     private ItemSlot itemSlot => _player.inventory[index];
+    private Button _button;
     
     private void Start()
     {
@@ -19,6 +21,8 @@ public class ItemSlotView : MonoBehaviour
         {
             Init(itemSlot);
         };
+        
+        GetComponent<Button>().onClick.AddListener(UseItem);
     }
 
     public void Init(ItemSlot slot)
@@ -46,5 +50,10 @@ public class ItemSlotView : MonoBehaviour
     private void SetCount(ItemSlot slot)
     {
         count.text = slot.count.ToString();
+    }
+    
+    private void UseItem()
+    {
+        _player.inventory.UseItem(itemSlot);
     }
 }

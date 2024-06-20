@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: -7837073272767039501}
   - component: {fileID: 7802152093459851753}
   - component: {fileID: 8294126256888546567}
-  - component: {fileID: 8200331454434614900}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -259,15 +258,3 @@ MonoBehaviour:
     hp: 100
     damage: 50
     speed: 3.0197623
---- !u!114 &8200331454434614900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4229563781382785463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84f0368dfc7a4ca0a2bf7d38f6201197, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

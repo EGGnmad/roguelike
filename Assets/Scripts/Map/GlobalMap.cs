@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -18,10 +19,19 @@ namespace MapGeneration
         
         [SerializeField] private Dictionary<GlobalMapLayer, Tilemap> _tilemaps;
         private GlobalMapLayer _layer;
+        
+        // Maps
+        private RoomBehavior[] _rooms;
+        public IReadOnlyList<RoomBehavior> Rooms => _rooms;
 
         public void SetLayer(GlobalMapLayer layer)
         {
             _layer = layer;
+        }
+
+        public void SetRooms(RoomBehavior[] rooms)
+        {
+            _rooms = rooms;
         }
     }
 }

@@ -388,6 +388,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         Time.timeScale = 1f;
         
         _percentage = 1f; // 퍼센트 100%
+        _globalMap.SetRooms(_rooms);
     }
 
     #endregion

@@ -15,6 +15,7 @@ public class Item : ScriptableObject, IComparer
 
     public virtual void Use(Player player)
     {
+        Debug.Log($"{player.name} used item {name}");
     }
 
     public int Compare(object x, object y)

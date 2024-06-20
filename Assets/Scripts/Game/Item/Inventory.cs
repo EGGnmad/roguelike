@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
@@ -9,7 +10,7 @@ public class Inventory : INotifyPropertyChanged
 {
     private Player _owner;
     
-    [SerializeField, Sirenix.OdinInspector.ReadOnly] private List<ItemSlot> _itemSlots;
+    [SerializeField] private List<ItemSlot> _itemSlots;
     public ItemSlot this[int i]
     {
         get
@@ -66,7 +67,11 @@ public class Inventory : INotifyPropertyChanged
         if (slot == null) return false;
         
         slot.item?.Use(_owner);
-        slot.Remove();
+        bool removed = slot.Remove();
+        if (!removed)
+        {
+            _itemSlots.Remove(slot);
+        }
         
         OnPropertyChanged("_itemSlots");
         return true;

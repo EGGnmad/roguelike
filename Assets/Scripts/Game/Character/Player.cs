@@ -1,57 +1,34 @@
-using System;
+using Game.Character;
+using MapGeneration;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = System.Random;
 
 [SelectionBase, RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour, IControllable
+public class Player : Character
 {
     #region Fields:Serialized
 
-    [TabGroup("Stats"), HideLabel] public CharacterStats stats;
     [TabGroup("Inventory"), HideLabel] public Inventory inventory;
 
-    public Item test;
     #endregion
 
-    #region Fields:private
-
-    private Rigidbody2D _rigid;
-    private SpriteRenderer _sr;
-    private Vector2 _force;
-    
-    #endregion
+    #region Methods:Unity
 
     private void Awake()
     {
         inventory = new Inventory(15, this);
     }
 
-    private void Start()
-    {
-        _rigid = GetComponent<Rigidbody2D>();
-        _sr = GetComponent<SpriteRenderer>();
+    #endregion
 
-        inventory.AddItem(test);
-        inventory.AddItem(test);
+    #region Methods:PlayerStart
+
+    public void PlayerStart(GlobalMap globalMap)
+    {
+        var randomRoom = globalMap.Rooms[new Random().Next(globalMap.Rooms.Count)];
+        transform.position = randomRoom.transform.position;
     }
 
-    public void Move(Vector2 dir)
-    {
-        _force = dir * stats.speed;
-        
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            inventory.AddItem(test);
-        }
-    }
-
-    public void FixedUpdate()
-    {
-        _rigid.MovePosition(_rigid.position + _force * Time.fixedDeltaTime);
-
-        // 방향 바꾸기
-        if (!_sr) return;
-        if (_force.x > 0) _sr.flipX = false;
-        if (_force.x < 0) _sr.flipX = true;
-    }
+    #endregion
 }
