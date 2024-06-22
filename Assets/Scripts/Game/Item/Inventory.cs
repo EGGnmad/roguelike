@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Sirenix.OdinInspector;
+using Game.Character;
 using UnityEngine;
 
 [Serializable]
 public class Inventory : INotifyPropertyChanged
 {
-    private Player _owner;
+    private Character _owner;
     
-    [SerializeField] private List<ItemSlot> _itemSlots;
+    [SerializeField, Sirenix.OdinInspector.ReadOnly] private List<ItemSlot> _itemSlots;
     public ItemSlot this[int i]
     {
         get
@@ -25,13 +25,19 @@ public class Inventory : INotifyPropertyChanged
 
     private int _size;
     public int Size => _size;
-    
-    public Inventory(int size, Player player)
+
+    #region Methods:Ctor
+
+    public Inventory(int size, Character character)
     {
         _size = size;
         _itemSlots = new List<ItemSlot>(size);
-        _owner = player;
+        _owner = character;
     }
+    
+    #endregion
+
+    #region Methods:Inventory
 
     public bool AddItem(Item item)
     {
@@ -66,16 +72,11 @@ public class Inventory : INotifyPropertyChanged
     {
         if (slot == null) return false;
         
-        slot.item?.Use(_owner);
-        bool removed = slot.Remove();
-        if (!removed)
-        {
-            _itemSlots.Remove(slot);
-        }
-        
-        OnPropertyChanged("_itemSlots");
+        slot.Use(_owner);
         return true;
     }
+
+    #endregion
 
     #region Fields:Notify
 

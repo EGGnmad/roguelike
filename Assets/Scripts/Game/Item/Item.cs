@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Character;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -13,9 +14,9 @@ public class Item : ScriptableObject, IComparer
     [Multiline]
     public string description;
 
-    public virtual void Use(Player player)
+    public virtual void Use(Character character, ItemSlot slot)
     {
-        Debug.Log($"{player.name} used item {name}");
+        Debug.Log($"{character.name} used item {name}");
     }
 
     public int Compare(object x, object y)

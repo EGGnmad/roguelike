@@ -1,59 +1,59 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VContainer;
 
 [RequireComponent(typeof(Button))]
 public class ItemSlotView : MonoBehaviour
 {
     public Image icon;
     [SerializeField] private TextMeshProUGUI count;
-    public int index;
+    public int offset;
     
-    [Inject] private Player _player;
-    private ItemSlot itemSlot => _player.inventory[index];
-    private Button _button;
-    
-    private void Start()
+    public void OnInventoryViewChanged(Inventory inventory, int index)
     {
-        Init(itemSlot);
-        _player.inventory.PropertyChanged += (sender, args) =>
-        {
-            Init(itemSlot);
-        };
-        
-        GetComponent<Button>().onClick.AddListener(UseItem);
-    }
+        index = index + offset;
+        ItemSlot itemSlot = null;
 
-    public void Init(ItemSlot slot)
+        if (index < 0 || index > inventory.Size - 1)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+        }
+        
+        // 에러 핸들링
+        if (index >= 0 && index < inventory.Size)
+        {
+            itemSlot = inventory[index];
+        }
+        
+        SetIcon(itemSlot);
+        SetCount(itemSlot);
+    }
+    
+    private void SetIcon(ItemSlot slot)
     {
         if (slot == null)
         {
             icon.gameObject.SetActive(false);
-            count.gameObject.SetActive(false);
             return;
         }
         
-        // 껐으니깐 켜기
         icon.gameObject.SetActive(true);
-        count.gameObject.SetActive(true);
-        
-        SetIcon(slot);
-        SetCount(slot);
-    }
-
-    private void SetIcon(ItemSlot slot)
-    {
         icon.sprite = slot.item.icon;
     }
 
     private void SetCount(ItemSlot slot)
     {
+        if (slot == null)
+        {
+            count.gameObject.SetActive(false);
+            return;
+        }
+        
+        count.gameObject.SetActive(true);
         count.text = slot.count.ToString();
-    }
-    
-    private void UseItem()
-    {
-        _player.inventory.UseItem(itemSlot);
     }
 }

@@ -10,6 +10,7 @@ public class Player : Character
     #region Fields:Serialized
 
     [TabGroup("Inventory"), HideLabel] public Inventory inventory;
+    [SerializeField] private Item _testItemPrefab;
 
     #endregion
 
@@ -18,6 +19,12 @@ public class Player : Character
     private void Awake()
     {
         inventory = new Inventory(15, this);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        inventory.AddItem(_testItemPrefab);
     }
 
     #endregion

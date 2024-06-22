@@ -1,4 +1,5 @@
 using System;
+using Game.Character;
 
 
 [Serializable]
@@ -37,9 +38,8 @@ public class ItemSlot
         return false;
     }
 
-    public void Use(Player player)
+    public void Use(Character character)
     {
-        item?.Use(player);
-        Remove();
+        item?.Use(character, this);
     }
 }

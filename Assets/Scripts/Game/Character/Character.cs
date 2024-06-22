@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Game.Character
 {
+    [SelectionBase, RequireComponent(typeof(Rigidbody2D))]
     public class Character : MonoBehaviour, IControllable, IDamagable
     {
         #region Fields:Serialized
@@ -32,8 +33,8 @@ namespace Game.Character
 
             // 방향 바꾸기
             if (!_sr) return;
-            if (_force.x > 0) _sr.flipX = false;
-            if (_force.x < 0) _sr.flipX = true;
+            if (_force.x > 0.5f) _sr.flipX = false;
+            if (_force.x < -0.5f) _sr.flipX = true;
         }
 
         #endregion
@@ -58,7 +59,7 @@ namespace Game.Character
 
         #region Methods:Unity
 
-        private void Start()
+        protected virtual void Start()
         {
             _rigid = GetComponent<Rigidbody2D>();
             _sr = GetComponent<SpriteRenderer>();
