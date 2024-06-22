@@ -10,6 +10,12 @@ public class PlayerController : MonoBehaviour, IController
     public void ControlStart(IControllable character)
     {
         _character = character;
+        _character.ControlStarted(this);
+    }
+
+    public void StopControl()
+    {
+        _character = null;
     }
 
     private void Start()

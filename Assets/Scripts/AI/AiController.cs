@@ -1,69 +1,117 @@
 using System;
-using AI;
+using System.Collections.Generic;
 using Game.Character;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-[RequireComponent(typeof(Character))]
-public class AiController : MonoBehaviour, IController
+namespace AI
 {
-    #region Fields:Control
+    public enum AiState
+    {
+        Patrol,
+        Chase,
+        Attack
+    }
     
-    private IControllable _character;
-    private ContextMap _cm;
-    
-    #endregion
-
-    #region Fields:Detect
-
-    public float detectRadius = 3f;
-
-    #endregion
-
-    #region Methods:Control
-
-    public void ControlStart(IControllable character)
+    [RequireComponent(typeof(Character))]
+    public class AiController : MonoBehaviour, IController, IStateMachine<AiState>
     {
-        _character = character;
-    }
+        #region Fields:Control
 
-    #endregion
+        [HideInInspector] public IControllable character;
+        [HideInInspector] public ContextMap cm;
 
-    private void Awake()
-    {
-        _cm = new ContextMap(16);
-    }
+        #endregion
 
-    private void Start()
-    {
-        _character = GetComponent<IControllable>();
-    }
+        #region Fields:Detect
 
-    private void Update()
-    {
-        // 캐릭터
-        var colliders = Physics2D.OverlapCircleAll(transform.position, detectRadius, LayerMask.GetMask("Character"));
-        foreach (var obj in colliders)
+        [Header("AI")]
+        [Unit(Units.Meter)] public float detectRadius = 3f;
+
+        #endregion
+
+        #region Fields:FSM
+
+        [Header("FSM")]
+        [SerializeField] private AiState _currentStateKey;
+        private Dictionary<AiState, IState> _stateMap;
+
+        #endregion
+
+        #region Methods:Control
+
+        public void ControlStart(IControllable c)
         {
-            if(obj.gameObject == gameObject) continue;
+            character = c;
+            character.ControlStarted(this);
+        }
+
+        public void StopControl()
+        {
+            character = null;
+        }
+
+        #endregion
+
+        #region Methods:Unity
+
+        private void Awake()
+        {
+            cm = new ContextMap(8);
+            _stateMap = new Dictionary<AiState, IState>();
+        }
+
+        private void Start()
+        {
+            character = GetComponent<IControllable>();
             
-            if (obj.CompareTag("Player"))
+            // Init FSM
+            InitStateMap();
+            ChangeState(GetCurrentStateKey());
+        }
+
+        private void Update()
+        {
+            if (character == null) return;
+            
+            GetCurrentState().StateUpdate();
+        }
+
+        #endregion
+
+        #region Methods:FSM
+        
+        public AiState GetCurrentStateKey() => _currentStateKey;
+        
+        private IState GetCurrentState()
+        {
+            IState state;
+            if (!_stateMap.TryGetValue(GetCurrentStateKey(), out state))
             {
-                _cm.Add(obj.transform.position - transform.position, ContextMap.Mode.Interest);
+                throw new NullReferenceException($"There's no state named {_currentStateKey.ToString()}");
             }
-            else if (obj.CompareTag("Enemy"))
+
+            return state;
+        }
+
+        public void ChangeState(AiState newStateKey)
+        {
+            GetCurrentState().StateExit();
+
+            _currentStateKey = newStateKey;
+            
+            GetCurrentState().StateEnter();
+        }
+
+        public void InitStateMap()
+        {
+            var states = GetComponents<StateBehaviorBase<AiState>>();
+            foreach (var state in states)
             {
-                if(Vector2.Distance(transform.position, obj.transform.position) > 1f) continue;
-                _cm.Add(obj.transform.position - transform.position, ContextMap.Mode.Danger);
+                _stateMap.Add(state.GetStateKey(), state);
             }
         }
 
-        _character.Move(_cm.GetDestination());
-        Debug.DrawRay(transform.position, _cm.GetDestination(), Color.red);
-        _cm.Clear();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, detectRadius);
+        #endregion
     }
 }

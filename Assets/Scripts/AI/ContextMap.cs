@@ -32,7 +32,7 @@ namespace AI
             }
         }
 
-        public void Add(Vector2 dir, Mode mode)
+        public void Add(Vector2 dir, Mode mode = Mode.Interest)
         {
             for (int i = 0; i < Resolution; i++)
             {

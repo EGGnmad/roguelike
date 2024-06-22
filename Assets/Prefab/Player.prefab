@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    maxHp: 0
+    maxHp: 100
     damage: 50
     speed: 3.0197623
   inventory:

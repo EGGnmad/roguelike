@@ -14,6 +14,7 @@ namespace Game.Character
         
         #region Fields:Control
 
+        private IController _controller;
         private Rigidbody2D _rigid;
         private SpriteRenderer _sr;
         private Vector2 _force;
@@ -22,6 +23,11 @@ namespace Game.Character
 
         #region Methods:Control
 
+        public virtual void ControlStarted(IController controller)
+        {
+            _controller = controller;
+        }
+        
         public virtual void Move(Vector2 dir)
         {
             _force = dir * stats.speed;
@@ -50,11 +56,11 @@ namespace Game.Character
             }
         }
 
-        protected virtual void Died()
+        public virtual void Died()
         {
-            
+            _controller.StopControl();
         }
-
+        
         #endregion
 
         #region Methods:Unity
