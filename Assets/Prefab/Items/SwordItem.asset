@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26339f366e4e47b291e702bfbd60d604, type: 3}
-  m_Name: TestItem
+  m_Script: {fileID: 11500000, guid: 8e66dd513aa94cb5a8d98c3d14877704, type: 3}
+  m_Name: SwordItem
   m_EditorClassIdentifier: 
   icon: {fileID: -423023060, guid: f6997e6f3ef5c464ab7003b110462119, type: 3}
-  name: "\uD14C\uC2A4\uD2B8"
-  stackSize: 10
-  description: "\uD14C\uC2A4\uD2B8 \uC544\uC774\uD15C."
+  name: "\uAC80"
+  stackSize: 1
+  description: "\uD3C9\uBC94\uD55C \uCCA0\uC81C \uAC80\uC774\uB2E4."
+  attackPrefab: {fileID: -2095381240798192587, guid: 247b2506147b54837aa33281aa13fb26, type: 3}

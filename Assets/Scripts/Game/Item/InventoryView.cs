@@ -7,7 +7,6 @@ using VContainer;
 public class InventoryView : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
-    [SerializeField] private int _index = 0;
 
     #region Fields:Player
     
@@ -18,14 +17,14 @@ public class InventoryView : MonoBehaviour
 
     #region Fields:Event
 
-    public UnityEvent<Inventory, int> InventoryViewChanged;
+    public UnityEvent<Inventory> InventoryViewChanged;
     
     #endregion
     
     #region Fields:KeyInput
 
-    private Timestamped<long> _prevLastKeyInput;
-    private Timestamped<long> _nextLastKeyInput;
+    private float minInputTime = 0.6f;
+    private Timestamped<long> _lastKeyInput;
     
     private IDisposable _prevKeyInputStream;
     private IDisposable _nextKeyInputStream;
@@ -54,9 +53,9 @@ public class InventoryView : MonoBehaviour
             .Timestamp()
             .Where(x =>
             {
-                if((x.Timestamp - _prevLastKeyInput.Timestamp).TotalSeconds > 0.6f)
+                if((x.Timestamp - _lastKeyInput.Timestamp).TotalSeconds >= minInputTime)
                 {
-                    _prevLastKeyInput = x;
+                    _lastKeyInput = x;
                     return true;
                 }
                 return false;
@@ -71,9 +70,9 @@ public class InventoryView : MonoBehaviour
             .Timestamp()
             .Where(x =>
             {
-                if((x.Timestamp - _nextLastKeyInput.Timestamp).TotalSeconds > 0.6f)
+                if((x.Timestamp - _lastKeyInput.Timestamp).TotalSeconds >= minInputTime)
                 {
-                    _nextLastKeyInput = x;
+                    _lastKeyInput = x;
                     return true;
                 }
                 return false;
@@ -100,31 +99,30 @@ public class InventoryView : MonoBehaviour
 
     public void Next()
     {
-        if (_index >= _inventory.Size - 1) return;
+        if (_inventory.Index >= _inventory.Size - 1) return;
 
         _animator.Play("InventorySwapLeft");
-        _index = Mathf.Clamp(_index + 1, 0, _inventory.Size - 1);
+        _inventory.Next();
         OnInventoryViewChanged();
     }
 
     public void Prev()
     {
-        if (_index <= 0) return;
+        if (_inventory.Index <= 0) return;
         
         _animator.Play("InventorySwapRight");
-        _index = Mathf.Clamp(_index - 1, 0, _inventory.Size - 1);
+        _inventory.Prev();
         OnInventoryViewChanged();
     }
 
     public void UseItem()
     {
-        ItemSlot slot = _inventory[_index];
-        _inventory.UseItem(slot);
+        _inventory.UseItem();
     }
 
     private void OnInventoryViewChanged()
     {
-        InventoryViewChanged?.Invoke(_inventory, _index);
+        InventoryViewChanged?.Invoke(_inventory);
     }
 
     #endregion

@@ -23,14 +23,14 @@ public class Inventory : INotifyPropertyChanged
         }
     }
 
-    private int _size;
-    public int Size => _size;
+    public int Size { get; private set; }
+    public int Index { get; private set; }
 
     #region Methods:Ctor
 
     public Inventory(int size, Character character)
     {
-        _size = size;
+        Size = size;
         _itemSlots = new List<ItemSlot>(size);
         _owner = character;
     }
@@ -57,7 +57,7 @@ public class Inventory : INotifyPropertyChanged
             }
         }
 
-        if (_itemSlots.Count < _size)
+        if (_itemSlots.Count < Size)
         {
             _itemSlots.Add(new ItemSlot(item));
             
@@ -74,6 +74,21 @@ public class Inventory : INotifyPropertyChanged
         
         slot.Use(_owner);
         return true;
+    }
+
+    public void Prev()
+    {
+        Index = Mathf.Clamp(Index - 1, 0, Size - 1);
+    }
+    
+    public void Next()
+    {
+        Index = Mathf.Clamp(Index + 1, 0, Size - 1);
+    }
+
+    public void UseItem()
+    {
+        UseItem(_itemSlots[Index]);
     }
 
     #endregion

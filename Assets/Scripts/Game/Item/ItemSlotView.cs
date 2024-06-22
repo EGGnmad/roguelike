@@ -9,9 +9,9 @@ public class ItemSlotView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI count;
     public int offset;
     
-    public void OnInventoryViewChanged(Inventory inventory, int index)
+    public void OnInventoryViewChanged(Inventory inventory)
     {
-        index = index + offset;
+        int index = inventory.Index + offset;
         ItemSlot itemSlot = null;
 
         if (index < 0 || index > inventory.Size - 1)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Character;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace AI
@@ -113,5 +114,14 @@ namespace AI
         }
 
         #endregion
+
+        private void OnDrawGizmos()
+        {
+            if (character == null) return;
+            
+            var c = character as Character;
+
+            Handles.Label(c.transform.position - (c.transform.localScale/2), GetCurrentStateKey().ToString());
+        }
     }
 }
