@@ -23,6 +23,9 @@ namespace MapGeneration
         // Maps
         private RoomBehavior[] _rooms;
         public IReadOnlyList<RoomBehavior> Rooms => _rooms;
+        
+        private HallwayBehavior[] _hallways;
+        public IReadOnlyList<HallwayBehavior> Hallways => _hallways;
 
         public void SetLayer(GlobalMapLayer layer)
         {
@@ -32,6 +35,11 @@ namespace MapGeneration
         public void SetRooms(RoomBehavior[] rooms)
         {
             _rooms = rooms;
+        }
+
+        public void SetHallways(HallwayBehavior[] hallways)
+        {
+            _hallways = hallways;
         }
     }
 }

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour, IController
 
     public void StopControl()
     {
+        _character?.Move(Vector2.zero);
         _character = null;
     }
 

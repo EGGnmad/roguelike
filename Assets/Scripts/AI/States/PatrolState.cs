@@ -15,6 +15,7 @@ namespace AI
         {
             _controller = GetComponent<IStateMachine<AiState>>() as AiController;
             _origin = transform.position;
+            SetDestination();
         }
 
         private void SetDestination()
@@ -28,7 +29,6 @@ namespace AI
         
         public override void StateEnter()
         {
-            SetDestination();
         }
 
         public override void StateUpdate()

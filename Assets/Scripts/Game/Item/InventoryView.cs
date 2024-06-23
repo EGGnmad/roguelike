@@ -28,7 +28,6 @@ public class InventoryView : MonoBehaviour
     
     private IDisposable _prevKeyInputStream;
     private IDisposable _nextKeyInputStream;
-    private IDisposable _useKetInputStream;
     
     #endregion
 
@@ -81,16 +80,12 @@ public class InventoryView : MonoBehaviour
             {
                 Next();
             });
-        
-        // 아이템 사용
-        _useKetInputStream = keyInputStream.Where(_ => Input.GetMouseButtonDown(0)).Subscribe(x => UseItem());
     }
 
     private void OnDestroy()
     {
         _prevKeyInputStream.Dispose();
         _nextKeyInputStream.Dispose();
-        _useKetInputStream.Dispose();
     }
 
     #endregion
@@ -113,11 +108,6 @@ public class InventoryView : MonoBehaviour
         _animator.Play("InventorySwapRight");
         _inventory.Prev();
         OnInventoryViewChanged();
-    }
-
-    public void UseItem()
-    {
-        _inventory.UseItem();
     }
 
     private void OnInventoryViewChanged()

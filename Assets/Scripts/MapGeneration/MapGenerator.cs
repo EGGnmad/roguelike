@@ -25,6 +25,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
     [TabGroup("Config")] public float boostTimeScale = 50;
     [TabGroup("Config"), Required, AssetsOnly, SerializeField] private RoomBehavior roomPrefab;
     [TabGroup("Config"), Required, AssetsOnly, SerializeField] private HallwayBehavior hallwayPrefab;
+    [TabGroup("Config"), Required, AssetsOnly, SerializeField] private AiGenerator aiGenerator; 
 
     [TabGroup("Room"), Unit(Units.Meter)] public float radius;
     [TabGroup("Room")] public int minRoomSize;
@@ -315,6 +316,17 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         _globalMap.CurrentTilemap.GetComponent<TilemapCollider2D>().ProcessTilemapChanges();
         _globalMap.CurrentTilemap.GetComponent<CompositeCollider2D>().GenerateGeometry();
     }
+
+    private void SetMobSpawners()
+    {
+        foreach (var room in _rooms)
+        {
+            float minSize = Math.Min(room.GetSize().x, room.GetSize().y)/2f;
+            AiGenerator mobSpawner = Instantiate(aiGenerator, room.transform.position, Quaternion.identity);
+            mobSpawner.radius = minSize;
+            mobSpawner.count = new System.Random().Next(3, 6);
+        }
+    }
     
     public async UniTask Generate()
     {
@@ -381,6 +393,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
             return;
         }
         SetColliders();
+        SetMobSpawners();
         
         ActiveOnly();
 
@@ -389,6 +402,7 @@ public class MapGenerator : MonoBehaviour, IAsyncGenerator, IMapGenerator, IDela
         
         _percentage = 1f; // 퍼센트 100%
         _globalMap.SetRooms(_rooms);
+        _globalMap.SetHallways(_hallways);
     }
 
     #endregion

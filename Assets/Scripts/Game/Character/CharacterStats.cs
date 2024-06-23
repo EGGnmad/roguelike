@@ -7,9 +7,9 @@ public struct CharacterStats
 {
     [ProgressBar(0, 200, r: 1, g: 0, b: 0), LabelText(SdfIconType.HeartFill), ShowInInspector]
     public int maxHp;
-    
+
     private int _hp;
-    public int Hp
+    [ProgressBar(0, 200, r: 1, g: 0, b: 0), LabelText(SdfIconType.HeartFill), ReadOnly, ShowInInspector] public int Hp
     {
         get => _hp;
         set
@@ -17,7 +17,7 @@ public struct CharacterStats
             _hp = value;
             _hp = Mathf.Clamp(_hp, 0, maxHp);
         }
-    }
+    } 
     
     [ProgressBar(0, 100), LabelText(SdfIconType.Magic), ShowInInspector]
     public int damage;
@@ -28,8 +28,13 @@ public struct CharacterStats
     public CharacterStats(int maxHp=0, int damage=0, int speed=0)
     {
         this.maxHp = maxHp;
-        _hp = maxHp;
         this.damage = damage;
         this.speed = speed;
+        _hp = maxHp;
+    }
+
+    public void SetHpToMax()
+    {
+        _hp = maxHp;
     }
 }

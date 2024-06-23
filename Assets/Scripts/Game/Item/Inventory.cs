@@ -10,7 +10,7 @@ public class Inventory : INotifyPropertyChanged
 {
     private Character _owner;
     
-    [SerializeField, Sirenix.OdinInspector.ReadOnly] private List<ItemSlot> _itemSlots;
+    [SerializeField] private List<ItemSlot> _itemSlots;
     public ItemSlot this[int i]
     {
         get
@@ -24,7 +24,7 @@ public class Inventory : INotifyPropertyChanged
     }
 
     public int Size { get; private set; }
-    public int Index { get; private set; }
+    public int Index { get; private set; } = 0;
 
     #region Methods:Ctor
 
@@ -88,7 +88,29 @@ public class Inventory : INotifyPropertyChanged
 
     public void UseItem()
     {
+        if (Index >= _itemSlots.Count) return;
         UseItem(_itemSlots[Index]);
+    }
+
+    public void RemoveItem(ItemSlot slot)
+    {
+        if (!slot.Remove())
+        {
+            Debug.Log(_itemSlots.Remove(slot));
+        }
+        OnPropertyChanged("_itemSlots");
+    }
+
+    public void Clone(Inventory other)
+    {
+        _itemSlots.Clear();
+        foreach (var itemSlot in other._itemSlots)
+        {
+            for (int i = 0; i < itemSlot.count; i++)
+            {
+                AddItem(itemSlot.item);
+            }
+        }
     }
 
     #endregion

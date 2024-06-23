@@ -4,6 +4,7 @@ namespace AI
 {
     public class ChaseState : StateBehaviorBase<AiState>
     {
+        public float maxAttackRadius = 2f;
         private AiController _controller;
 
         private void Start()
@@ -34,8 +35,8 @@ namespace AI
                     collidePlayer = true;
                     cm.Add(obj.transform.position - transform.position, ContextMap.Mode.Interest);
                     
-                    // 플레이와 거리가 1m 이하 이면 공격
-                    if (Vector2.Distance(obj.transform.position, transform.position) <= 1f)
+                    // 플레이와 거리가 반걍 이내라면 공격
+                    if (Vector2.Distance(obj.transform.position, transform.position) <= maxAttackRadius)
                     {
                         _controller.ChangeState(AiState.Attack);
                     }

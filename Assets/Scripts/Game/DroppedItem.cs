@@ -10,7 +10,7 @@ public class DroppedItem : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Player player = other.GetComponent<Player>();
-            player.inventory.AddItem(_item);
+            if (!player.inventory.AddItem(_item)) return;
             Destroy(gameObject);
         }
     }

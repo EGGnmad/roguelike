@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,14 +12,16 @@ namespace Game.Character
 
         [TabGroup("Stats"), HideLabel] public CharacterStats stats;
 
+        public virtual Vector2 LookDirection => _force.normalized;
+
         #endregion
         
         #region Fields:Control
 
-        private IController _controller;
-        private Rigidbody2D _rigid;
-        private SpriteRenderer _sr;
-        private Vector2 _force;
+        protected IController _controller;
+        protected Rigidbody2D _rigid;
+        protected SpriteRenderer _sr;
+        protected Vector2 _force;
     
         #endregion
 
@@ -54,11 +58,26 @@ namespace Game.Character
             {
                 Died();
             }
+            else
+            {
+                SetTint();
+            }
         }
 
         public virtual void Died()
         {
             _controller.StopControl();
+            Destroy(gameObject);
+        }
+
+        public async void SetTint()
+        {
+            _sr.color = Color.red;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
+            
+            if (!_sr) return;
+            _sr.color = Color.white;
         }
         
         #endregion
@@ -69,8 +88,15 @@ namespace Game.Character
         {
             _rigid = GetComponent<Rigidbody2D>();
             _sr = GetComponent<SpriteRenderer>();
+            
+            stats.SetHpToMax();
         }
 
         #endregion
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawRay(transform.position, LookDirection);
+        }
     }
 }

@@ -44,11 +44,13 @@ namespace AI
         public void ControlStart(IControllable c)
         {
             character = c;
-            character.ControlStarted(this);
+            c.ControlStarted(this);
         }
 
         public void StopControl()
         {
+            cm.Clear();
+            character?.Move(cm.GetDestination());
             character = null;
         }
 
@@ -65,6 +67,7 @@ namespace AI
         private void Start()
         {
             character = GetComponent<IControllable>();
+            ControlStart(character);
             
             // Init FSM
             InitStateMap();
